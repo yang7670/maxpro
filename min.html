@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通訊軟體</title>
+</head>
+<body>
+    <h1>通訊軟體</h1>
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="輸入訊息...">
+    <button onclick="sendMessage()">發送</button>
+
+    <script>
+        // WebSocket連接
+        const socket = new WebSocket('ws://localhost:3000');
+
+        // 連接成功時執行
+        socket.onopen = function(event) {
+            console.log('WebSocket連接成功');
+        };
+
+        // 接收訊息
+        socket.onmessage = function(event) {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += '<p>' + event.data + '</p>';
+        };
+
+        // 發送訊息
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            socket.send(message);
+            messageInput.value = '';
+        }
+    </script>
+</body>
+</html>
